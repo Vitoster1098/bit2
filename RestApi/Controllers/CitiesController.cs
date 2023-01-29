@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestApi.Models;
 
 namespace RestApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/cities")]
     [ApiController]
     public class CitiesController : ControllerBase
     {
         private readonly CitiesContext _context;
+        private readonly StreetsContext _streetsContext;
 
-        public CitiesController(CitiesContext context)
+        public CitiesController(CitiesContext context, StreetsContext streetsContext)
         {
             _context = context;
+            _streetsContext = streetsContext;
         }
 
         // GET: api/Cities
@@ -29,16 +26,26 @@ namespace RestApi.Controllers
 
         // GET: api/Cities/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CitiesModel>> GetCitiesModel(int id)
+        public async Task<ActionResult<IEnumerable<CitiesModel>>> GetCitiesModel(int id)
         {
-            var citiesModel = await _context.CitiesModel.FindAsync(id);
-
-            if (citiesModel == null)
+            var citiesModel = await _context.CitiesModel.Where(m => m.Id == id).ToListAsync();
+            if(citiesModel == null)
             {
                 return NotFound();
             }
-
             return citiesModel;
+        }
+
+        // GET: api/Cities/5/Streets
+        [HttpGet("{id}/streets")]
+        public async Task<ActionResult<IEnumerable<StreetsModel>>> GetStreetsByCityId(int id)
+        {
+            var steetsModel = await _context.StreetsModel.Where(m =>m.Id == id).ToListAsync();
+            if (steetsModel == null)
+            {
+                return NotFound();
+            }
+            return steetsModel;
         }
         /*
         // PUT: api/Cities/5

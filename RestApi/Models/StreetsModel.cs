@@ -7,6 +7,7 @@ namespace RestApi.Models
     public class StreetsModel
     {
         [Display(Name = "Id улицы")]
+        [Key]
         public int Id { get; set; }
         [Required]
         [StringLength(100)]

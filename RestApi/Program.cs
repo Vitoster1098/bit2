@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using RestApi.Models;
-using Pomelo.EntityFrameworkCore;
-using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
